@@ -1,0 +1,116 @@
+<!-- import utils function start -->
+<%- include('./utils/getUpdatedAt.ejs') %> <%-
+include('./utils/getMoneyFormat.ejs') %>
+<!-- import utils function end -->
+
+<%- include('./component/sidebar.ejs') %>
+<div class="main">
+  <%- include('./component/navigation.ejs') %>
+  <div id="main" class="main__content">
+    <%- include('./component/notification.ejs') %>
+    <!-- bread crumb start -->
+    <div class="d-flex align-items-center main__content__crumb">
+      <a class="main__content__crumb--before">Cars</a>
+      <img src="/image/ic_chevron-right.svg" alt="" srcset="" />
+      <a class="main__content__crumb--now">List Cars</a>
+    </div>
+    <!-- bread crumb end -->
+    <!-- title & create car start -->
+    <div class="d-flex justify-content-between main__content__title">
+      <h5>List Cars</h5>
+      <div class="main__content__title--btn">
+        <a href="/create" class="d-flex align-items-center">
+          <i data-feather="plus" class="fi_plus"></i><span>Add New Car</span>
+        </a>
+      </div>
+    </div>
+    <!-- title & create car end -->
+    <!-- content filter start -->
+    <div class="main__content__filter">
+      <form class="form-inline" action="/" method="get">
+        <div class="d-flex gap-4 main__content__filter__btn">
+          <button id="btn__type" type="submit" class="btn__type__non" name="type" value="all">
+            All
+          </button>
+          <button id="btn__type" type="submit" class="btn__type__non" name="type" value="small">
+            Small
+          </button>
+          <button id="btn__type" type="submit" class="btn__type__non" name="type" value="medium">
+            Medium
+          </button>
+          <button id="btn__type" type="submit" class="btn__type__non" name="type" value="large">
+            Large
+          </button>
+        </div>
+      </form>
+    </div>
+    <!-- content filter end -->
+    <!-- list cars start -->
+    <div class="main__content__cars">
+      <div class="row mt-2 me-2 gy-4 gx-4">
+        <% if (cars.length < 1) { %>
+        <div class="col-sm-12">
+          <div class="card__notFound">
+            <img src="/image/img-BeepBeep.svg" alt="Car not found" srcset="">
+            <h1>Car Not Found!</h1>
+          </div>
+        </div>
+        <% } else{ %>
+        <%cars.forEach(car => { %>
+        <div id="card__car" class="col-sm-4">
+          <div class="card">
+            <img src="<%= car?.imgUrl  %>" class="card-img-top p-4 card__image" alt="Car Image" />
+            <div class="card-body">
+              <p class="ms-2"><%= car?.name %>/<%= car?.type %></p>
+              <h5 class="card-title ms-2 card__price">
+                Rp <%= getMoneyFormat(car?.rentPerDay) %> / hari
+              </h5>
+              <div class="d-flex gap-2 ms-2 car__updated__box">
+                <img src="/image/ic_clock.svg" alt="" srcset="" />
+                <p class="card__updated"><%= getUpdatedAt(car?.updatedAt) %></p>
+              </div>
+              <div class="d-flex gap-4 mx-3 card__btn mb-2">
+                <a class="block delete" data-bs-toggle="modal" data-bs-target="#exampleModal<%= car?.id %>">
+                  <i data-feather="trash" class="fi_trash"></i>
+                  <span>Delete</span>
+                </a>
+                <a href="/update/<%= car?.id  %>" class="block edit">
+                  <i data-feather="edit" class="fi_edit"></i>
+                  <span>Edit</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- modal start -->
+        <div class="modal fade" id="exampleModal<%= car?.id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-body">
+                <div class="d-flex justify-content-center pt-3">
+                  <img src="/image/img-BeepBeep.svg" alt="" srcset="" class="img" />
+                </div>
+                <h5 class="text-center">Menghapus Data Mobil</h5>
+                <p class="text-center">
+                  Setelah dihapus, data mobil tidak dapat <br />
+                  dikembalikan. Yakin ingin menghapus?
+                </p>
+              </div>
+              <div class="d-flex justify-content-center gap-4 modal__btn mb-5">
+                <a href="/delete/<%= car?.id  %>" class="btn btn-primary">Ya</a>
+                <button type="button" class="btn btn-outline-primary" data-bs-dismiss="modal">
+                  Tidak
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- modal end -->
+        <% }) %>
+        <% } %>
+      </div>
+    </div>
+    <!-- list cars end -->
+  </div>
+</div>
+<%- include('./component/footer.ejs') %>

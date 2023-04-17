@@ -1,0 +1,52 @@
+<%- include('../component/sidebar.ejs') %>
+<div class="main">
+  <%- include('../component/navigation.ejs') %>
+  <div id="main" class="main__content">
+    <%- include('../component/notification.ejs') %>
+    <!-- bread crumb start -->
+    <div class="d-flex align-items-center main__content__crumb">
+      <a class="main__content__crumb--before">Cars</a>
+      <img src="/image/ic_chevron-right.svg" alt="" srcset="" />
+      <a class="main__content__crumb--now">List Cars</a>
+    </div>
+    <!-- bread crumb end -->
+    <!-- title & create car start -->
+    <div class="d-flex justify-content-between main__content__title">
+      <h5>List Cars</h5>
+      <div class="main__content__title--btn">
+        <a href="/create" class="d-flex align-items-center">
+          <img src="/image/ic_plus.svg" alt="" srcset="" /><span>Add New Car</span>
+        </a>
+      </div>
+    </div>
+    <!-- title & create car end -->
+    <!-- content filter start -->
+    <div class="main__content__filter">
+      <form class="form-inline" action="/" method="get">
+        <div class="d-flex gap-4 main__content__filter__btn">
+          <button id="btn__type" type="submit" class="btn__type__non" name="type" value="all">
+            All
+          </button>
+          <button id="btn__type" type="submit" class="btn__type__non" name="type" value="small">
+            Small
+          </button>
+          <button id="btn__type" type="submit" class="btn__type__non" name="type" value="medium">
+            Medium
+          </button>
+          <button id="btn__type" type="submit" class="btn__type__non" name="type" value="large">
+            Large
+          </button>
+        </div>
+      </form>
+    </div>
+    <!-- content filter end -->
+    <div class="col-sm-12">
+      <div class="card__notFound">
+        <img src="/image/img-BeepBeep.svg" alt="Car not found" srcset="">
+        <h1>Car Not Found!</h1>
+        <a href="/">Back to List Cars</a>
+      </div>
+    </div>
+  </div>
+</div>
+<%- include('../component/footer.ejs') %>
