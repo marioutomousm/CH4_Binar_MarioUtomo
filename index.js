@@ -1,44 +1,59 @@
-var express = require("express");
-const dotenv = require("dotenv");
-const cookieParser = require("cookie-parser");
+
+const express = require("express");
+const multer = require("multer");
+const expressLayouts = require("express-ejs-layouts");
+
+
+
+const {
+  loadMobil,
+  editSection,
+  createSection,
+  viewSearch,
+  buatMobil,
+  updateMobil,
+  hapusMobil,
+} = require("./controller/handler.js");
+
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "./public/cars");
+  },
+  filename: (req, file, cb) => {
+    const unique = Date.now();
+    cb(null, unique + "-" + file.originalname);
+  },
+});
+const upload = multer({ storage });
+
+const app = express();
+const port = 3000;
+
 const path = require("path");
-const cors = require("cors");
-const router = require("./config/routes.js");
 const DIR = path.resolve();
 const staticPublicPath = path.join(DIR, "public");
-// app.use(express.static(__dirname + "/public"));
 const viewsPath = path.join(DIR, "views");
-var app = express();
 
-
-app.use(cors());
-app.use(cookieParser());
-app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(staticPublicPath));
 app.set("views", viewsPath);
+
+
 app.set("view engine", "ejs");
-app.use(router);
+app.use(expressLayouts);
+// app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true }));
+app.get("/", loadMobil);
+app.get("/create", createSection);
+app.get("/update/:id", editSection);
+app.get("/delete/:id", hapusMobil);
+app.get("/:size", viewSearch);
 
-dotenv.config();
+app.post("/create", upload.single("up-photo"), buatMobil);
+app.post("/update/:id", upload.single("edited-photo"), updateMobil);
 
-app.listen(3000, function (req, res) {
-  console.log("Connected on port:3000");
+
+app.listen(port, () => {
+  console.log(`Server listened and running at http://localhost:${port}`);
 });
-
-module.exports = app;
-const { Client } = require("pg");
-
-const client = new Client();
-client.connect(); 
-
-
-// app.get("/", function (req, res) {
-  //   res.render("index.ejs");
-// });
-
-// app.get("/create", function (req, res) {
-//   res.render("pages/createCar.ejs");
-// });
-
-// // Server setup
